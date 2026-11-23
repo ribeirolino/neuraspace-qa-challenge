@@ -1,0 +1,16 @@
+{
+  "name": "neuraspace-qa-challenge",
+  "version": "1.0.0",
+  "description": "Neuraspace Quality Assurance Engineer Technical Challenge",
+  "scripts": {
+    "test": "playwright test",
+    "test:ex2": "playwright test tests/exercise-2-celestrak.spec.ts",
+    "test:ex3": "playwright test tests/exercise-3-space-objects.spec.ts",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  }
+}
