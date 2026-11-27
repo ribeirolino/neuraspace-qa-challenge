@@ -52,19 +52,13 @@ test('Get all space objects', async ({ request }) => {
   expect(get.status()).toBe(200);
 })
 
-/*test('Get a space objects by cosparId', async ({ request }) => {
-  const get = await request.get(`${URL}/id`, {
-    params: { id: '1990-067T' },
-  });
-  expect(get.status()).toBe(200);
-})*/
 
 test('Get a space objects count', async ({ request }) => {
   const get = await request.get(`${URL}/count`);
   expect(get.status()).toBe(200);
 })
 
-//What is the id? Should be internalId? Or not? 
+//What is the id? Should be internalId? Or not? Test is failling
 test('Get a space object by id', async ({ request }) => {
   const get200 = await request.get(`${URL}/id`, {
     params: { id: '3d97dac8-305b-475b-9276-6f6ca2d34bd9' },
@@ -77,6 +71,7 @@ test('Get a space object by id', async ({ request }) => {
   expect(get404.status()).toBe(404);
 })
 
+//What is the id? Should be internalId? Or not? Test is failling
 test('Delete a space object by id', async ({ request }) => {
   const deleteResponse200 = await request.delete(`${URL}/id`, {
     params: { id: '3d97dac8-305b-475b-9276-6f6ca2d34bd9' },
@@ -108,6 +103,7 @@ test('Reject invalid objectType format', async ({ request }) => {
 
 });
 
+//Test is failling because it was not supposed to accept this noradId
 test('Reject invalid noradId format', async ({ request }) => {
   const newPayload = { ...validPayload(), noradId: '1234A' };
   const response = await request.post(URL, { data: newPayload });
