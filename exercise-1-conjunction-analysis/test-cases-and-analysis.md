@@ -22,19 +22,19 @@ Before writing the test cases, I would like to leave some findings/inconsistenci
 
 | ID | Scenario | Preconditions / Steps / Inputs | Expected Behavior / Result |
 | :--- | :--- | :--- | :--- |
-| TC-01 | 2 messages (Boundary - 1) | Send 2 warning messages with Alert parameters (`P = 0.05`). | Conjunction is not evaluated/returned with an active warning status (requires `>= 3` messages). |
-| TC-02 | 3 messages (Exact boundary = 3) | Send the 3rd warning message for matching Normal criteria. | Evaluation is triggered; `warning_messages_analyzed: 3`, status: `"ok"` (or `"normal"`). |
-| TC-03 | Normal (Happy Path) | Assume 3 warning messages sent for the same conjunction. 3rd/latest message: `P = 0.00005`, Miss Distance = `15000 m`, TCA = `now + 15 days`. | Status: `"ok"` / `"normal"`. |
-| TC-04 | Warning (Probability + Distance + Time) | Assume 3 warning messages sent for the same conjunction. 3rd/latest message: `P = 0.005`, Miss Distance = `8000 m`, TCA = `now + 10 days`. | Status: `"warning"`. |
-| TC-05 | Warning (Critical Time & Distance) | Assume 3 warning messages sent for the same conjunction. 3rd/latest message: `P = 0.00001`, Miss Distance = `4000 m` (`< 5000 m`), TCA = `now + 4 days` (`< 5d`). | Status: `"warning"`. |
-| TC-06 | Alert (High Collision Probability) | Assume 3 warning messages sent for the same conjunction. 3rd/latest message: `P = 0.02` (`> 0.01`), Miss Distance = `50000 m`, TCA = `now + 30 days`. | Status: `"alert"`. |
-| TC-07 | Probability = 0.0001 (Lower boundary of Warning) | Assume 3 messages sent for the same conjunction. 3rd/latest message: `P = 0.0001`, `D = 9999 m`, TCA = `now + 13d 23h`. | Status: `"warning"`. |
-| TC-08 | Probability = 0.0000999 (Just below Warning) | Assume 3 messages sent for the same conjunction. 3rd/latest message: `P = 0.0000999`, `D = 10001 m`, TCA = `now + 14d 1h`. | Should evaluate as `"ok"` / `"normal"`. |
-| TC-09 | Boundary gap: Probability = 0.01 | Assume 3 messages sent for the same conjunction. 3rd/latest message: `P = 0.01`, `D = 9000 m`, TCA = `now + 10d`. | Verify if it falls back to `"ok"`/`"normal"` or is treated as `"warning"`/`"alert"` given that it is not defined. |
-| TC-10 | Boundary gap: Miss distance = 10000 m | Assume 3 messages sent for the same conjunction. 3rd/latest message: `P = 0.00005`, `D = 10000 m`, TCA = `now + 15d`. | Verify exact boundary behavior (neither `> 10000` nor `< 10000` is explicitly defined). |
-| TC-11 | Warning boundary: TCA < 5d and D < 5000 m | Assume 3 messages sent for the same conjunction. 3rd/latest message: `P = 0.0`, `D = 4999 m`, TCA = `now + 4d 23h 59m`. | Should evaluate as `"warning"`. |
-| TC-12 | Warning boundary (1 condition fails): D = 5000 m | Assume 3 messages sent for the same conjunction. 3rd/latest message: `P = 0.0`, `D = 5000 m`, TCA = `now + 3d`. | Should not trigger Warning branch 2 (requires strictly `< 5000 m`). |
+| TC-01 | Send 2 messages | Send 2 warning messages with Alert parameters (`P = 0.05`). | Conjunction is not evaluated/returned with an active warning status (requires `>= 3` messages). |
+| TC-02 | 3 messages | Send the 3rd warning message for matching Normal criteria. | Evaluation is triggered; `warning_messages_analyzed: 3`, status: `"ok"` (or `"normal"`). |
+| TC-03 | Normal (Happy Path) | Assume 3 warning messages sent for the same conjunction. 3rd/latest message: `P = 0.00005`, Miss Distance = `15000 m`, TCA = `15 days`. | Status: `"ok"` / `"normal"`. |
+| TC-04 | Warning (Probability + Distance + Time) | Assume 3 warning messages sent for the same conjunction. 3rd/latest message: `P = 0.005`, Miss Distance = `8000 m`, TCA = `10 days`. | Status: `"warning"`. |
+| TC-05 | Warning (Critical Time & Distance) | Assume 3 warning messages sent for the same conjunction. 3rd/latest message: `P = 0.00001`, Miss Distance = `4000 m` (`< 5000 m`), TCA = `4 days` (`< 5d`). | Status: `"warning"`. |
+| TC-06 | Alert (High Collision Probability) | Assume 3 warning messages sent for the same conjunction. 3rd/latest message: `P = 0.02` (`> 0.01`), Miss Distance = `50000 m`, TCA = `30 days`. | Status: `"alert"`. |
+| TC-07 | Probability = 0.0001 (Lower boundary of Warning) | Assume 3 messages sent for the same conjunction. 3rd/latest message: `P = 0.0001`, `D = 9999 m`, TCA = `13d 23h`. | Status: `"warning"`. |
+| TC-08 | Probability = 0.0000999 (Just below Warning) | Assume 3 messages sent for the same conjunction. 3rd/latest message: `P = 0.0000999`, `D = 10001 m`, TCA = `14d 1h`. | Should evaluate as `"ok"` / `"normal"`. |
+| TC-09 | Boundary gap: Probability = 0.01 | Assume 3 messages sent for the same conjunction. 3rd/latest message: `P = 0.01`, `D = 9000 m`, TCA = `10d`. | Verify if it falls back to `"ok"`/`"normal"` or is treated as `"warning"`/`"alert"` given that it is not defined. |
+| TC-10 | Boundary gap: Miss distance = 10000 m | Assume 3 messages sent for the same conjunction. 3rd/latest message: `P = 0.00005`, `D = 10000 m`, TCA = `15d`. | Verify exact boundary behavior (neither `> 10000` nor `< 10000` is explicitly defined). |
+| TC-11 | Warning boundary: TCA < 5d and D < 5000 m | Assume 3 messages sent for the same conjunction. 3rd/latest message: `P = 0.0`, `D = 4999 m`, TCA = `4d 23h 59m`. | Should evaluate as `"warning"`. |
+| TC-12 | Warning boundary (1 condition fails): D = 5000 m | Assume 3 messages sent for the same conjunction. 3rd/latest message: `P = 0.0`, `D = 5000 m`, TCA = `3d`. | Should not trigger Warning branch 2 (requires strictly `< 5000 m`). |
 | TC-13 | Some fields are empty | `P` = empty, `D` = empty. | Confirm what should be the behavior here. |
 | TC-14 | Wrong values for some fields | Put negative numbers for `P`, `D`, and TCA. | Confirm what should be the behavior here. |
 | TC-15 | Past Time of Closest Approach (TCA < now) | Send 3 messages with `expected_date_of_collision` in the past. | Verify what is the behavior. Should be ignored? |
-| TC-16 | Duplicate messages | Send the exact same payload 2 times in a row. | Verify if the system counts 3 messages or rejects and check with Product team what should be the expected. |
+| TC-16 | Duplicate messages | Send the exact same payload 2 times in a row. | Check with the team what is expected |
